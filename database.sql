@@ -132,7 +132,7 @@ CREATE TABLE `updates` (
 
 -- Admin: admin@aapengineerings.com / Admin@123
 INSERT INTO `users` (`name`,`email`,`password`,`created_at`,`updated_at`) VALUES
-('AAP Admin','admin@aapengineerings.com','$2y$10$BAcFpdhSmLmO/3ygNxxCNOazddIEPvlw4A/eB8yqD7I1edJrg.gSO',NOW(),NOW());
+('AAP Admin','admin@aapengineerings.com','$2y$10$5/016NH0E8qWjnICwWPEoOxEnJXMCKYMev47WQFX6DVLBWX1wbG96',NOW(),NOW());
 
 INSERT INTO `cities` (`name`,`state`,`is_active`,`created_at`,`updated_at`) VALUES
 ('Pune','Maharashtra',1,NOW(),NOW()),
