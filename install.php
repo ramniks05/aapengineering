@@ -8,13 +8,9 @@
 
 declare(strict_types=1);
 
-$configFile = __DIR__.'/config.php';
-if (! is_file($configFile)) {
-    http_response_code(503);
-    exit('Missing config.php — copy config.example.php to config.php first.');
-}
+require __DIR__.'/includes/load-config.php';
 
-$config = require $configFile;
+$config = load_config();
 $key = $config['install_key'] ?? 'AapSetup2026';
 
 if (($_GET['key'] ?? '') !== $key) {

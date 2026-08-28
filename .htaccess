@@ -6,10 +6,6 @@
     RewriteRule ^ index.php [QSA,L]
 </IfModule>
 
-<Files "config.php">
-    Require all denied
-</Files>
-
-<FilesMatch "^(config\.example\.php|database\.sql)$">
+<FilesMatch "^(config\.(php|production\.php|example\.php)|database\.sql)$">
     Require all denied
 </FilesMatch>
