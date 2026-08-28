@@ -60,7 +60,7 @@ foreach ($statements as $statement) {
 echo ">> Executed {$ok} SQL statements\n\n";
 echo "SUCCESS!\n\n";
 echo "Website: ".$config['app_url']."\n";
-echo "Admin:   ".$config['app_url']."/manage/login\n";
+echo "Admin:   ".$config['app_url']."/panel/login\n";
 echo "Email:   admin@aapengineerings.com\n";
 echo "Pass:    Admin@123\n\n";
 echo "IMPORTANT: Delete install.php from the server now.\n";

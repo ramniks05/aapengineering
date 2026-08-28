@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete') {
         $pdo->prepare('DELETE FROM updates WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
         flash('success', 'Update deleted.');
-        redirect('manage/updates');
+        redirect('panel/updates');
     }
 
     $title = trim($_POST['title'] ?? '');
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($title === '') {
         flash('error', 'Title is required.');
-        redirect('manage/updates');
+        redirect('panel/updates');
     }
 
     $publishedAt = trim($_POST['published_at'] ?? '');
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([...array_slice($data, 0, 7), now(), now()]);
         flash('success', 'Update created.');
     }
-    redirect('manage/updates');
+    redirect('panel/updates');
 }
 
 $edit = null;
@@ -98,7 +98,7 @@ $u = $edit ?: ['title' => '', 'slug' => '', 'excerpt' => '', 'body' => '', 'cove
                     <td><?= e($row['title']) ?></td>
                     <td><?= $row['is_published'] ? e(format_date(substr($row['published_at'] ?? '', 0, 10))) : 'Draft' ?></td>
                     <td>
-                        <a href="<?= e(url('manage/updates?edit='.$row['id'])) ?>">Edit</a> ·
+                        <a href="<?= e(url('panel/updates?edit='.$row['id'])) ?>">Edit</a> ·
                         <a href="<?= e(url('update/'.$row['slug'])) ?>" target="_blank">View</a> ·
                         <form method="POST" style="display:inline;" onsubmit="return confirm('Delete?')">
                             <?= csrf_field() ?>

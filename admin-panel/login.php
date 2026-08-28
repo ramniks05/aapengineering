@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 if (is_logged_in()) {
-    redirect('manage');
+    redirect('panel');
 }
 
 $errors = [];
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['admin_id'] = $user['id'];
         $_SESSION['admin_name'] = $user['name'];
-        redirect('manage');
+        redirect('panel');
     }
     $errors[] = 'Invalid email or password.';
 }

@@ -11,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete') {
         $pdo->prepare('DELETE FROM clients WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
         flash('success', 'Client deleted.');
-        redirect('manage/clients');
+        redirect('panel/clients');
     }
 
     $name = trim($_POST['name'] ?? '');
     if ($name === '') {
         flash('error', 'Name is required.');
-        redirect('manage/clients');
+        redirect('panel/clients');
     }
 
     $data = [
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([...array_slice($data, 0, 6), now(), now()]);
         flash('success', 'Client added.');
     }
-    redirect('manage/clients');
+    redirect('panel/clients');
 }
 
 $edit = null;
@@ -83,7 +83,7 @@ $c = $edit ?: ['name' => '', 'logo_url' => '', 'website_url' => '', 'industry' =
                     <td><?= e($row['name']) ?></td>
                     <td><?= $row['is_active'] ? 'Yes' : 'No' ?></td>
                     <td>
-                        <a href="<?= e(url('manage/clients?edit='.$row['id'])) ?>">Edit</a> ·
+                        <a href="<?= e(url('panel/clients?edit='.$row['id'])) ?>">Edit</a> ·
                         <form method="POST" style="display:inline;" onsubmit="return confirm('Delete?')">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="delete">

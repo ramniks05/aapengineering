@@ -11,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete') {
         $pdo->prepare('DELETE FROM gallery_items WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
         flash('success', 'Gallery item deleted.');
-        redirect('manage/gallery');
+        redirect('panel/gallery');
     }
 
     $url = trim($_POST['url'] ?? '');
     if ($url === '') {
         flash('error', 'URL is required.');
-        redirect('manage/gallery');
+        redirect('panel/gallery');
     }
 
     $data = [
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([...array_slice($data, 0, 8), now(), now()]);
         flash('success', 'Gallery item added.');
     }
-    redirect('manage/gallery');
+    redirect('panel/gallery');
 }
 
 $edit = null;
@@ -95,7 +95,7 @@ $g = $edit ?: ['title' => '', 'type' => 'image', 'url' => '', 'thumbnail_url' =>
                     <td><?= e($row['type']) ?></td>
                     <td><?= $row['is_active'] ? 'Yes' : 'No' ?></td>
                     <td>
-                        <a href="<?= e(url('manage/gallery?edit='.$row['id'])) ?>">Edit</a> ·
+                        <a href="<?= e(url('panel/gallery?edit='.$row['id'])) ?>">Edit</a> ·
                         <form method="POST" style="display:inline;" onsubmit="return confirm('Delete?')">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="delete">

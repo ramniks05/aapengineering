@@ -11,14 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'mark_read') {
         $pdo->prepare('UPDATE enquiries SET is_read=1, updated_at=? WHERE id=?')->execute([now(), (int) ($_POST['id'] ?? 0)]);
         flash('success', 'Marked as read.');
-        redirect('manage/enquiries?id='.(int) ($_POST['id'] ?? 0));
+        redirect('panel/enquiries?id='.(int) ($_POST['id'] ?? 0));
     }
 
     if ($action === 'delete') {
         $id = (int) ($_POST['id'] ?? 0);
         $pdo->prepare('DELETE FROM enquiries WHERE id = ?')->execute([$id]);
         flash('success', 'Enquiry deleted.');
-        redirect('manage/enquiries');
+        redirect('panel/enquiries');
     }
 }
 
@@ -48,7 +48,7 @@ require __DIR__.'/../includes/layout/admin-header.php';
             <tbody>
             <?php foreach ($enquiries as $row): ?>
                 <tr style="<?= ($viewId === (int) $row['id']) ? 'background:var(--surface-2);' : '' ?>">
-                    <td><a href="<?= e(url('manage/enquiries?id='.$row['id'])) ?>"><?= e($row['name']) ?></a></td>
+                    <td><a href="<?= e(url('panel/enquiries?id='.$row['id'])) ?>"><?= e($row['name']) ?></a></td>
                     <td><?= e($row['phone']) ?></td>
                     <td><?= e(format_date(substr($row['created_at'] ?? '', 0, 10))) ?></td>
                     <td><?= $row['is_read'] ? 'Yes' : 'No' ?></td>

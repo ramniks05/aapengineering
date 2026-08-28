@@ -1,4 +1,0 @@
-# Block direct access — public pages are loaded only via index.php router
-<IfModule mod_authz_core.c>
-    Require all denied
-</IfModule>

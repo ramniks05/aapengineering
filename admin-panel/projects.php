@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     $id = (int) ($_POST['id'] ?? 0);
     $pdo->prepare('DELETE FROM projects WHERE id = ?')->execute([$id]);
     flash('success', 'Project deleted.');
-    redirect('manage/projects');
+    redirect('panel/projects');
 }
 
 $q = trim($_GET['q'] ?? '');
@@ -34,7 +34,7 @@ $projects = $stmt->fetchAll();
 $pageTitle = 'Projects';
 $heading = 'Projects';
 $currentAdmin = 'projects';
-$adminActions = '<a href="'.e(url('manage/project')).'" class="btn btn-primary">Add project</a>';
+$adminActions = '<a href="'.e(url('panel/project')).'" class="btn btn-primary">Add project</a>';
 require __DIR__.'/../includes/layout/admin-header.php';
 ?>
 <form method="GET" class="filters">
@@ -62,7 +62,7 @@ require __DIR__.'/../includes/layout/admin-header.php';
                     <td><?= e($p['city_name'] ?? '—') ?></td>
                     <td><?= $p['is_published'] ? 'Yes' : 'No' ?></td>
                     <td style="white-space:nowrap;">
-                        <a href="<?= e(url('manage/project?id='.$p['id'])) ?>">Edit</a> ·
+                        <a href="<?= e(url('panel/project?id='.$p['id'])) ?>">Edit</a> ·
                         <a href="<?= e(url('project/'.$p['slug'])) ?>" target="_blank">View</a> ·
                         <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this project?')">
                             <?= csrf_field() ?>

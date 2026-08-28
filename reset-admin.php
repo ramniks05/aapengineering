@@ -42,7 +42,7 @@ if ($stmt->rowCount() === 0) {
     echo "Admin password reset.\n";
 }
 
-echo "\nLogin: ".$config['app_url']."/manage/login\n";
+echo "\nLogin: ".$config['app_url']."/panel/login\n";
 echo "Email: admin@aapengineerings.com\n";
 echo "Pass:  Admin@123\n\n";
 echo "DELETE reset-admin.php from the server now.\n";

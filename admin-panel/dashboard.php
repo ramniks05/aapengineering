@@ -38,7 +38,7 @@ require __DIR__.'/../includes/layout/admin-header.php';
                     <td><?= e($row['name']) ?><?= $row['is_read'] ? '' : ' *' ?></td>
                     <td><?= e($row['phone']) ?></td>
                     <td><?= e(format_date(substr($row['created_at'] ?? '', 0, 10))) ?></td>
-                    <td><a href="<?= e(url('manage/enquiries?id='.$row['id'])) ?>">View</a></td>
+                    <td><a href="<?= e(url('panel/enquiries?id='.$row['id'])) ?>">View</a></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>

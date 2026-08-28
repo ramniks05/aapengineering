@@ -10,7 +10,7 @@ No Laravel, no Composer, no Node build — works on Hostinger shared hosting.
 - Project statuses: Upcoming, Ongoing, Completed
 - Media: CDN images, CDN videos, YouTube embeds
 - WhatsApp floating button + contact map
-- Admin at `/manage/login` (projects, clients, gallery, updates, cities, enquiries)
+- Admin at `/panel/login` (projects, clients, gallery, updates, cities, enquiries)
 
 ## Requirements
 
@@ -43,7 +43,7 @@ Set `app_url` in `config.php` to `http://127.0.0.1:8000`.
 
 ### Default admin
 
-- URL: `/manage/login`
+- URL: `/panel/login`
 - Email: `admin@aapengineerings.com`
 - Password: `Admin@123`
 
@@ -65,7 +65,7 @@ Steps:
 2. Create `config.php` from `config.example.php` with Hostinger MySQL credentials.
 3. Run `https://yoursite.com/install.php?key=AapSetup2026` once, or import `database.sql` in phpMyAdmin.
 4. Delete `install.php`.
-5. Visit `https://yoursite.com/manage/login`.
+5. Visit `https://yoursite.com/panel/login`.
 
 ## Project structure
 
@@ -78,7 +78,7 @@ install.php        — one-time browser setup
 assets/css/        — styles
 includes/          — bootstrap, DB, helpers, layouts
 pages/             — public pages
-manage/            — admin panel
+admin-panel/       — admin panel PHP files (URLs use /panel/)
 ```
 
 ## Company contact settings

@@ -11,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete') {
         $pdo->prepare('DELETE FROM cities WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
         flash('success', 'City deleted.');
-        redirect('manage/cities');
+        redirect('panel/cities');
     }
 
     $name = trim($_POST['name'] ?? '');
     if ($name === '') {
         flash('error', 'City name is required.');
-        redirect('manage/cities');
+        redirect('panel/cities');
     }
 
     $data = [
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ->execute([...array_slice($data, 0, 3), now(), now()]);
         flash('success', 'City added.');
     }
-    redirect('manage/cities');
+    redirect('panel/cities');
 }
 
 $edit = null;
@@ -78,7 +78,7 @@ $c = $edit ?: ['name' => '', 'state' => '', 'is_active' => 1];
                     <td><?= e($row['state'] ?? '—') ?></td>
                     <td><?= $row['is_active'] ? 'Yes' : 'No' ?></td>
                     <td>
-                        <a href="<?= e(url('manage/cities?edit='.$row['id'])) ?>">Edit</a> ·
+                        <a href="<?= e(url('panel/cities?edit='.$row['id'])) ?>">Edit</a> ·
                         <form method="POST" style="display:inline;" onsubmit="return confirm('Delete? Projects will keep but lose city link.')">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="delete">

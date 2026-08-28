@@ -22,13 +22,13 @@ $currentAdmin = $currentAdmin ?? '';
         </div>
         <?php
         $nav = [
-            'dashboard' => ['manage', 'Dashboard'],
-            'projects' => ['manage/projects', 'Projects'],
-            'clients' => ['manage/clients', 'Clients'],
-            'gallery' => ['manage/gallery', 'Gallery'],
-            'updates' => ['manage/updates', 'Updates'],
-            'cities' => ['manage/cities', 'Cities'],
-            'enquiries' => ['manage/enquiries', 'Enquiries'],
+            'dashboard' => ['panel', 'Dashboard'],
+            'projects' => ['panel/projects', 'Projects'],
+            'clients' => ['panel/clients', 'Clients'],
+            'gallery' => ['panel/gallery', 'Gallery'],
+            'updates' => ['panel/updates', 'Updates'],
+            'cities' => ['panel/cities', 'Cities'],
+            'enquiries' => ['panel/enquiries', 'Enquiries'],
         ];
         foreach ($nav as $key => [$href, $label]):
             $active = ($currentAdmin === $key) ? 'active' : '';
@@ -36,7 +36,7 @@ $currentAdmin = $currentAdmin ?? '';
             <a href="<?= e(url($href)) ?>" class="<?= $active ?>"><?= e($label) ?></a>
         <?php endforeach; ?>
         <a href="<?= e(url()) ?>" target="_blank">View website</a>
-        <form method="POST" action="<?= e(url('manage/logout')) ?>" style="margin-top:1rem;padding:0 .85rem;">
+        <form method="POST" action="<?= e(url('panel/logout')) ?>" style="margin-top:1rem;padding:0 .85rem;">
             <?= csrf_field() ?>
             <button class="btn btn-secondary" type="submit" style="width:100%;color:#12261e;">Logout</button>
         </form>

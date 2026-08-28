@@ -71,7 +71,7 @@ function is_logged_in(): bool
 function require_admin(): void
 {
     if (! is_logged_in()) {
-        redirect('manage/login');
+        redirect('panel/login');
     }
 }
 

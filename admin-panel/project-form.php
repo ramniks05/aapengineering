@@ -14,7 +14,7 @@ if ($id > 0) {
     $project = $stmt->fetch();
     if (! $project) {
         flash('error', 'Project not found.');
-        redirect('manage/projects');
+        redirect('panel/projects');
     }
     $m = $pdo->prepare('SELECT * FROM project_media WHERE project_id = ? ORDER BY sort_order, id');
     $m->execute([$id]);
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mediaId = (int) ($_POST['media_id'] ?? 0);
         $pdo->prepare('DELETE FROM project_media WHERE id = ? AND project_id = ?')->execute([$mediaId, $id]);
         flash('success', 'Media removed.');
-        redirect('manage/project?id='.$id);
+        redirect('panel/project?id='.$id);
     }
 
     if ($action === 'add_media' && $id > 0) {
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->prepare('INSERT INTO project_media (project_id, type, url, thumbnail_url, caption, sort_order, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)')
                 ->execute([$id, $type, $url, trim($_POST['thumbnail_url'] ?? '') ?: null, trim($_POST['caption'] ?? '') ?: null, (int) ($_POST['sort_order'] ?? 0), now(), now()]);
             flash('success', 'Media added.');
-            redirect('manage/project?id='.$id);
+            redirect('panel/project?id='.$id);
         }
     }
 
@@ -85,14 +85,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->prepare('UPDATE projects SET title=?, slug=?, status=?, city_id=?, client_name=?, project_type=?, short_description=?, description=?, cover_image_url=?, start_date=?, end_date=?, is_featured=?, is_published=?, sort_order=?, updated_at=? WHERE id=?')
                     ->execute($data);
                 flash('success', 'Project updated.');
-                redirect('manage/project?id='.$id);
+                redirect('panel/project?id='.$id);
             }
 
             $pdo->prepare('INSERT INTO projects (title, slug, status, city_id, client_name, project_type, short_description, description, cover_image_url, start_date, end_date, is_featured, is_published, sort_order, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
                 ->execute([...array_slice($data, 0, 14), now(), now()]);
             $newId = (int) $pdo->lastInsertId();
             flash('success', 'Project created. You can now add media.');
-            redirect('manage/project?id='.$newId);
+            redirect('panel/project?id='.$newId);
         }
     }
 }
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save'
 $pageTitle = $project ? 'Edit project' : 'Add project';
 $heading = $pageTitle;
 $currentAdmin = 'projects';
-$adminActions = '<a href="'.e(url('manage/projects')).'" class="btn btn-secondary">Back</a>';
+$adminActions = '<a href="'.e(url('panel/projects')).'" class="btn btn-secondary">Back</a>';
 require __DIR__.'/../includes/layout/admin-header.php';
 ?>
 <div class="split">
