@@ -94,7 +94,3 @@ Edit the `company` section in `config.php` (phone, email, WhatsApp, map embed, h
 | Video (YouTube) | YouTube watch URL or video ID |
 
 Cover image is a separate CDN URL on the project form.
-
-## Legacy Laravel files
-
-The repo may still contain an older Laravel app (`app/`, `vendor/`, `artisan`, etc.). The live site uses the plain PHP files at the project root. You can remove the Laravel folders later if you no longer need them.
