@@ -74,7 +74,7 @@ require __DIR__.'/../includes/layout/header.php';
                     <?php foreach ($loopClients as $client): ?>
                         <div class="chip">
                             <?php if ($client['logo_url']): ?>
-                                <img src="<?= e($client['logo_url']) ?>" alt="<?= e($client['name']) ?>">
+                                <img class="client-logo client-logo--sm" src="<?= e($client['logo_url']) ?>" alt="<?= e($client['name']) ?>">
                             <?php endif; ?>
                             <div>
                                 <strong><?= e($client['name']) ?></strong>

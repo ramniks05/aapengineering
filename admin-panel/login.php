@@ -33,7 +33,7 @@ $pageTitle = 'Login';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Login | AAP Engineerings</title>
-    <link rel="stylesheet" href="<?= e(asset('css/app.css?v=4')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/app.css?v=5')) ?>">
 </head>
 <body class="admin-body">
 <div class="container" style="max-width:420px;margin:4rem auto;padding:0 1rem;">

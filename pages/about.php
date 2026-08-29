@@ -52,7 +52,7 @@ require __DIR__.'/../includes/layout/header.php';
             <?php foreach ($clients as $client): ?>
                 <div class="client-card panel">
                     <?php if ($client['logo_url']): ?>
-                        <img src="<?= e($client['logo_url']) ?>" alt="<?= e($client['name']) ?>" style="max-height:48px;margin-bottom:.8rem;">
+                        <img class="client-logo" src="<?= e($client['logo_url']) ?>" alt="<?= e($client['name']) ?>">
                     <?php endif; ?>
                     <strong><?= e($client['name']) ?></strong>
                     <?php if ($client['industry']): ?><p style="color:var(--muted);margin:.3rem 0 0;"><?= e($client['industry']) ?></p><?php endif; ?>

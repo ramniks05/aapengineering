@@ -602,11 +602,19 @@ button.btn-ghost:hover {
   place-items: center;
   gap: 0.7rem;
 }
-.client-card img {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 16px;
+.client-card img,
+.client-logo {
+  display: block;
+  max-width: min(160px, 100%);
+  width: auto;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.4rem 0.55rem;
 }
 .client-card strong {
   font-family: var(--font-display);
@@ -635,11 +643,19 @@ button.btn-ghost:hover {
   min-width: 220px;
   box-shadow: var(--shadow);
 }
-.clients-track img {
-  width: 42px;
-  height: 42px;
+.clients-track img,
+.clients-track .client-logo {
+  width: auto;
+  height: auto;
+  max-width: 88px;
+  max-height: 48px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 0.25rem 0.35rem;
+  flex-shrink: 0;
 }
 
 .service-list { display: grid; gap: 1rem; }
