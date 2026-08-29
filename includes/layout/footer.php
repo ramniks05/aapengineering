@@ -2,7 +2,7 @@
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>
-            <strong>AAP Engineerings</strong>
+            <strong><?= e($appName) ?></strong>
             <p>Complete electrical projects — goods, installation and commissioning under one accountable team.</p>
             <p style="margin-top:1rem;">
                 <a class="btn btn-accent" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -20,11 +20,15 @@
         <div>
             <p style="font-weight:700;color:var(--steel);margin:0 0 .7rem;">Contact</p>
             <div class="footer-links">
-                <a href="tel:<?= e(preg_replace('/\s+/', '', $company['phone'])) ?>"><?= e($company['phone']) ?></a>
-                <a href="mailto:<?= e($company['email']) ?>"><?= e($company['email']) ?></a>
+                <?php foreach (company_phones($company) as $phone): ?>
+                    <a href="<?= e(phone_href($phone)) ?>"><?= e($phone) ?></a>
+                <?php endforeach; ?>
+                <?php foreach (company_emails($company) as $email): ?>
+                    <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a>
+                <?php endforeach; ?>
                 <span><?= e($company['address']) ?></span>
             </div>
-            <p style="margin-top:1.2rem;font-size:.9rem;">&copy; <?= date('Y') ?> AAP Engineerings</p>
+            <p style="margin-top:1.2rem;font-size:.9rem;">&copy; <?= date('Y') ?> <?= e($appName) ?></p>
         </div>
     </div>
 </footer>

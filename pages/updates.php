@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'updates';
-$pageTitle = 'Updates | AAP Engineerings';
+$pageTitle = 'Updates | '.$config['app_name'];
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
 $offset = ($page - 1) * $perPage;

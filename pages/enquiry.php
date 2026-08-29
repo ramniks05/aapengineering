@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'enquiry';
-$pageTitle = 'Enquiry | AAP Engineerings';
+$pageTitle = 'Enquiry | '.$config['app_name'];
 $errors = [];
 $old = $_POST ?: ['project_interest' => $_GET['interest'] ?? ''];
 

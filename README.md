@@ -1,6 +1,6 @@
-# AAP Engineerings
+# AAP Engineering
 
-Plain **PHP** website for **AAP Engineerings** — complete electrical projects, public portfolio with filters, enquiry form, and admin panel.
+Plain **PHP** website for **AAP Engineering** — complete electrical projects, public portfolio with filters, enquiry form, and admin panel.
 
 No Laravel, no Composer, no Node build — works on Hostinger shared hosting.
 

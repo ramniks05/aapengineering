@@ -31,14 +31,14 @@ $updates = $pdo->query("
     LIMIT 3
 ")->fetchAll();
 
-$pageTitle = 'AAP Engineerings | Complete Electrical Projects';
+$pageTitle = $config['app_name'].' | Complete Electrical Projects';
 require __DIR__.'/../includes/layout/header.php';
 ?>
 <section class="hero">
     <div class="hero-media" aria-hidden="true"></div>
     <div class="container hero-content">
         <div class="eyebrow">Full project electrical delivery</div>
-        <h1>AAP Engineerings</h1>
+        <h1><?= e($config['app_name']) ?></h1>
         <p>Industrial, commercial and institutional electrical works — complete project ownership from supply to commissioning.</p>
         <div class="hero-actions">
             <a href="<?= e(url('projects')) ?>" class="btn btn-primary">Explore projects</a>
@@ -64,7 +64,7 @@ require __DIR__.'/../includes/layout/header.php';
         <div class="section-head">
             <div>
                 <h2>Our clients</h2>
-                <p class="lede">Partners who trust AAP Engineerings for complete electrical execution.</p>
+                <p class="lede">Partners who trust <?= e($config['app_name']) ?> for complete electrical execution.</p>
             </div>
             <a href="<?= e(url('clients')) ?>" class="btn btn-secondary">View all</a>
         </div>

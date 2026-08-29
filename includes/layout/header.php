@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /** @var array $config */
 $company = $config['company'];
+$appName = $config['app_name'] ?? 'AAP Engineering';
 $waLink = whatsapp_link($company);
 $current = $currentPath ?? '';
 ?>
@@ -12,8 +13,8 @@ $current = $currentPath ?? '';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= e($pageTitle ?? 'AAP Engineerings') ?></title>
-    <meta name="description" content="<?= e($pageMeta ?? 'AAP Engineerings — complete electrical projects and services.') ?>">
+    <title><?= e($pageTitle ?? $appName) ?></title>
+    <meta name="description" content="<?= e($pageMeta ?? $appName.' — complete electrical projects and services.') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@ $current = $currentPath ?? '';
         <a href="<?= e(url()) ?>" class="brand">
             <div class="brand-mark">AAP</div>
             <div>
-                <strong>AAP Engineerings</strong>
+                <strong><?= e($appName) ?></strong>
                 <span>Electrical Projects & Services</span>
             </div>
         </a>

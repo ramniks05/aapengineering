@@ -18,7 +18,7 @@ if (! $update) {
 }
 
 $currentPath = 'updates';
-$pageTitle = $update['title'].' | AAP Engineerings';
+$pageTitle = $update['title'].' | '.$config['app_name'];
 require __DIR__.'/../includes/layout/header.php';
 ?>
 <div class="container page-hero">

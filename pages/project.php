@@ -39,7 +39,7 @@ $relatedStmt->execute([$project['id'], $project['city_id'], $project['status']])
 $related = $relatedStmt->fetchAll();
 
 $currentPath = 'projects';
-$pageTitle = $project['title'].' | AAP Engineerings';
+$pageTitle = $project['title'].' | '.$config['app_name'];
 $pageMeta = $project['short_description'] ?? '';
 require __DIR__.'/../includes/layout/header.php';
 ?>

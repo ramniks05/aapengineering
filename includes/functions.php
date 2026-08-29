@@ -101,6 +101,45 @@ function whatsapp_link(array $company): string
     return 'https://wa.me/'.$num.'?text='.rawurlencode($company['whatsapp_message'] ?? '');
 }
 
+function company_phones(array $company): array
+{
+    if (! empty($company['phones']) && is_array($company['phones'])) {
+        return array_values(array_filter($company['phones']));
+    }
+
+    $phones = [];
+    if (! empty($company['phone'])) {
+        $phones[] = $company['phone'];
+    }
+    if (! empty($company['phone_2'])) {
+        $phones[] = $company['phone_2'];
+    }
+
+    return $phones;
+}
+
+function company_emails(array $company): array
+{
+    if (! empty($company['emails']) && is_array($company['emails'])) {
+        return array_values(array_filter($company['emails']));
+    }
+
+    $emails = [];
+    if (! empty($company['email'])) {
+        $emails[] = $company['email'];
+    }
+    if (! empty($company['support_email'])) {
+        $emails[] = $company['support_email'];
+    }
+
+    return $emails;
+}
+
+function phone_href(string $phone): string
+{
+    return 'tel:'.preg_replace('/\s+/', '', $phone);
+}
+
 function status_label(string $status): string
 {
     return match ($status) {

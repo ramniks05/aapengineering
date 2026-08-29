@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'projects';
-$pageTitle = 'Projects | AAP Engineerings';
+$pageTitle = 'Projects | '.$config['app_name'];
 
 $q = trim($_GET['q'] ?? '');
 $status = $_GET['status'] ?? '';

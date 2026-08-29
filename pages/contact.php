@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'contact';
-$pageTitle = 'Contact Us | AAP Engineerings';
+$pageTitle = 'Contact Us | '.$config['app_name'];
 $company = $config['company'];
 $waLink = whatsapp_link($company);
 $errors = [];
@@ -46,13 +46,17 @@ require __DIR__.'/../includes/layout/header.php';
         <div class="panel contact-info">
             <h2>Get in touch</h2>
             <p style="margin-top:.9rem;">Phone</p>
-            <p><a href="tel:<?= e(preg_replace('/\s+/', '', $company['phone'])) ?>"><?= e($company['phone']) ?></a></p>
+            <?php foreach (company_phones($company) as $phone): ?>
+                <p><a href="<?= e(phone_href($phone)) ?>"><?= e($phone) ?></a></p>
+            <?php endforeach; ?>
             <p>WhatsApp</p>
-            <p><a href="<?= e($waLink) ?>" target="_blank" rel="noopener"><?= e($company['whatsapp']) ?></a></p>
+            <p><a href="<?= e($waLink) ?>" target="_blank" rel="noopener"><?= e($company['phones'][0] ?? $company['phone']) ?></a></p>
             <p>Email</p>
             <p>
-                <a href="mailto:<?= e($company['email']) ?>"><?= e($company['email']) ?></a><br>
-                <a href="mailto:<?= e($company['support_email']) ?>"><?= e($company['support_email']) ?></a>
+                <?php foreach (company_emails($company) as $i => $email): ?>
+                    <?php if ($i > 0): ?><br><?php endif; ?>
+                    <a href="mailto:<?= e($email) ?>"><?= e($email) ?></a>
+                <?php endforeach; ?>
             </p>
             <p>Office address</p>
             <p><?= e($company['address']) ?></p>

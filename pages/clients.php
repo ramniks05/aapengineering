@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 $currentPath = 'clients';
-$pageTitle = 'Clients | AAP Engineerings';
+$pageTitle = 'Clients | '.$config['app_name'];
 $clients = $pdo->query('SELECT * FROM clients WHERE is_active=1 ORDER BY sort_order, name')->fetchAll();
 
 require __DIR__.'/../includes/layout/header.php';
 ?>
 <div class="container page-hero">
     <h1>Our clients</h1>
-    <p class="lede">Organizations that trust AAP Engineerings for complete electrical project delivery.</p>
+    <p class="lede">Organizations that trust <?= e($config['app_name']) ?> for complete electrical project delivery.</p>
 </div>
 
 <section class="section" style="padding-top:0;">

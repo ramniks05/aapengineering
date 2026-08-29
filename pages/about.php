@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 $currentPath = 'about';
-$pageTitle = 'About | AAP Engineerings';
+$pageTitle = 'About | '.$config['app_name'];
 
 $clients = $pdo->query('SELECT * FROM clients WHERE is_active=1 ORDER BY sort_order, name LIMIT 12')->fetchAll();
 
 require __DIR__.'/../includes/layout/header.php';
 ?>
 <div class="container page-hero">
-    <h1>About AAP Engineerings</h1>
+    <h1>About <?= e($config['app_name']) ?></h1>
     <p class="lede">We deliver complete electrical projects — goods, installation and services — for clients who need reliable end-to-end execution.</p>
 </div>
 
@@ -18,7 +18,7 @@ require __DIR__.'/../includes/layout/header.php';
     <div class="container split">
         <div class="panel">
             <h2>Who we are</h2>
-            <p>AAP Engineerings focuses on full electrical project delivery for industrial plants, commercial buildings, warehouses, healthcare and institutional facilities.</p>
+            <p><?= e($config['app_name']) ?> focuses on full electrical project delivery for industrial plants, commercial buildings, warehouses, healthcare and institutional facilities.</p>
             <p>Unlike component-only suppliers, we take ownership of the project lifecycle: planning coordination, material supply, installation, testing and commissioning.</p>
         </div>
         <div class="panel">

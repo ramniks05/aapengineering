@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'gallery';
-$pageTitle = 'Gallery | AAP Engineerings';
+$pageTitle = 'Gallery | '.$config['app_name'];
 $items = $pdo->query('SELECT * FROM gallery_items WHERE is_active=1 ORDER BY sort_order, id DESC')->fetchAll();
 
 require __DIR__.'/../includes/layout/header.php';

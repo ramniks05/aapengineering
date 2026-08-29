@@ -20,7 +20,7 @@ if (($_GET['key'] ?? '') !== $key) {
 
 header('Content-Type: text/plain; charset=utf-8');
 
-echo "AAP Engineerings — plain PHP setup\n";
+echo "AAP Engineering — plain PHP setup\n";
 echo str_repeat('=', 42)."\n\n";
 
 $sqlFile = __DIR__.'/database.sql';

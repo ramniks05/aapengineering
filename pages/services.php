@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $currentPath = 'services';
-$pageTitle = 'Services | AAP Engineerings';
+$pageTitle = 'Services | '.$config['app_name'];
 require __DIR__.'/../includes/layout/header.php';
 ?>
 <div class="container page-hero">

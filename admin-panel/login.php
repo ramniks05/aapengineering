@@ -32,7 +32,7 @@ $pageTitle = 'Login';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login | AAP Engineerings</title>
+    <title>Admin Login | <?= e($config['app_name'] ?? 'AAP Engineering') ?></title>
     <link rel="stylesheet" href="<?= e(asset('css/app.css?v=5')) ?>">
 </head>
 <body class="admin-body">
