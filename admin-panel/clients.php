@@ -9,37 +9,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'delete') {
-        $pdo->prepare('DELETE FROM clients WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
-        flash('success', 'Client deleted.');
+        try {
+            $pdo->prepare('DELETE FROM clients WHERE id = ?')->execute([(int) ($_POST['id'] ?? 0)]);
+            flash('success', 'Client deleted.');
+        } catch (PDOException $e) {
+            flash('error', 'Could not delete client.');
+        }
         redirect('panel/clients');
     }
 
     $name = trim($_POST['name'] ?? '');
     if ($name === '') {
         flash('error', 'Name is required.');
-        redirect('panel/clients');
+        redirect('panel/clients'.(isset($_POST['id']) ? '?edit='.(int) $_POST['id'] : ''));
     }
 
-    $data = [
-        $name,
-        trim($_POST['logo_url'] ?? '') ?: null,
-        trim($_POST['website_url'] ?? '') ?: null,
-        trim($_POST['industry'] ?? '') ?: null,
-        (int) ($_POST['sort_order'] ?? 0),
-        isset($_POST['is_active']) ? 1 : 0,
-        now(),
-    ];
-
+    $logoUrl = clip_text($_POST['logo_url'] ?? '', 500);
+    $websiteUrl = clip_text($_POST['website_url'] ?? '', 500);
+    $industry = clip_text($_POST['industry'] ?? '', 255);
+    $sortOrder = (int) ($_POST['sort_order'] ?? 0);
+    $isActive = isset($_POST['is_active']) ? 1 : 0;
     $editId = (int) ($_POST['id'] ?? 0);
-    if ($editId > 0) {
-        $data[] = $editId;
-        $pdo->prepare('UPDATE clients SET name=?, logo_url=?, website_url=?, industry=?, sort_order=?, is_active=?, updated_at=? WHERE id=?')->execute($data);
-        flash('success', 'Client updated.');
-    } else {
-        $pdo->prepare('INSERT INTO clients (name, logo_url, website_url, industry, sort_order, is_active, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)')
-            ->execute([...array_slice($data, 0, 6), now(), now()]);
-        flash('success', 'Client added.');
+    $timestamp = now();
+
+    try {
+        if ($editId > 0) {
+            $pdo->prepare('
+                UPDATE clients
+                SET name = ?, logo_url = ?, website_url = ?, industry = ?, sort_order = ?, is_active = ?, updated_at = ?
+                WHERE id = ?
+            ')->execute([$name, $logoUrl, $websiteUrl, $industry, $sortOrder, $isActive, $timestamp, $editId]);
+            flash('success', 'Client updated.');
+        } else {
+            $pdo->prepare('
+                INSERT INTO clients (name, logo_url, website_url, industry, sort_order, is_active, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ')->execute([$name, $logoUrl, $websiteUrl, $industry, $sortOrder, $isActive, $timestamp, $timestamp]);
+            flash('success', 'Client added.');
+        }
+    } catch (PDOException $e) {
+        $message = 'Could not save client. Use a shorter logo URL or check database connection.';
+        if (! empty($config['debug'])) {
+            $message .= ' ('.$e->getMessage().')';
+        }
+        flash('error', $message);
+        redirect('panel/clients'.($editId > 0 ? '?edit='.$editId : ''));
     }
+
     redirect('panel/clients');
 }
 
@@ -61,13 +77,18 @@ $c = $edit ?: ['name' => '', 'logo_url' => '', 'website_url' => '', 'industry' =
 ?>
 <div class="split">
     <div class="panel">
-        <h2><?= $edit ? 'Edit client' : 'Add client' ?></h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem;">
+            <h2 style="margin:0;"><?= $edit ? 'Edit client' : 'Add client' ?></h2>
+            <?php if ($edit): ?>
+                <a href="<?= e(url('panel/clients')) ?>" class="btn btn-secondary">Add new</a>
+            <?php endif; ?>
+        </div>
         <form method="POST" class="form-grid">
             <?= csrf_field() ?>
             <?php if ($edit): ?><input type="hidden" name="id" value="<?= (int) $edit['id'] ?>"><?php endif; ?>
             <div class="form-field full"><label>Name *</label><input name="name" value="<?= e($c['name']) ?>" required></div>
-            <div class="form-field full"><label>Logo URL</label><input name="logo_url" value="<?= e($c['logo_url'] ?? '') ?>"></div>
-            <div class="form-field full"><label>Website URL</label><input name="website_url" value="<?= e($c['website_url'] ?? '') ?>"></div>
+            <div class="form-field full"><label>Logo URL (CDN)</label><input name="logo_url" value="<?= e($c['logo_url'] ?? '') ?>" placeholder="https://cdn.example.com/logo.png"></div>
+            <div class="form-field full"><label>Website URL</label><input name="website_url" value="<?= e($c['website_url'] ?? '') ?>" placeholder="https://example.com"></div>
             <div class="form-field"><label>Industry</label><input name="industry" value="<?= e($c['industry'] ?? '') ?>"></div>
             <div class="form-field"><label>Sort order</label><input type="number" name="sort_order" value="<?= (int) ($c['sort_order'] ?? 0) ?>"></div>
             <div class="form-field full"><label class="checkbox-row"><input type="checkbox" name="is_active" value="1" <?= ($c['is_active'] ?? 1) ? 'checked' : '' ?>> Active</label></div>

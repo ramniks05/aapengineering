@@ -13,3 +13,4 @@ require __DIR__ . '/db.php';
 require __DIR__ . '/functions.php';
 
 $pdo = db_connect($config['db']);
+db_migrate($pdo);

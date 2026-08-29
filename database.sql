@@ -90,8 +90,8 @@ CREATE TABLE `enquiries` (
 CREATE TABLE `clients` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `logo_url` varchar(255) DEFAULT NULL,
-  `website_url` varchar(255) DEFAULT NULL,
+  `logo_url` varchar(500) DEFAULT NULL,
+  `website_url` varchar(500) DEFAULT NULL,
   `industry` varchar(255) DEFAULT NULL,
   `sort_order` int unsigned NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,

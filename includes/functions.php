@@ -191,3 +191,13 @@ function now(): string
 {
     return date('Y-m-d H:i:s');
 }
+
+function clip_text(?string $value, int $max = 500): ?string
+{
+    if ($value === null || $value === '') {
+        return null;
+    }
+    $value = trim($value);
+
+    return strlen($value) > $max ? substr($value, 0, $max) : $value;
+}
