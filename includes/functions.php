@@ -201,3 +201,26 @@ function clip_text(?string $value, int $max = 500): ?string
 
     return strlen($value) > $max ? substr($value, 0, $max) : $value;
 }
+
+function unique_project_slug(PDO $pdo, string $slug, ?int $exceptId = null): string
+{
+    $base = $slug !== '' ? $slug : 'project';
+    $candidate = $base;
+    $i = 2;
+
+    while (true) {
+        $sql = 'SELECT id FROM projects WHERE slug = ?';
+        $params = [$candidate];
+        if ($exceptId !== null && $exceptId > 0) {
+            $sql .= ' AND id != ?';
+            $params[] = $exceptId;
+        }
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        if (! $stmt->fetch()) {
+            return $candidate;
+        }
+        $candidate = $base.'-'.$i;
+        $i++;
+    }
+}

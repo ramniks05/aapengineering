@@ -28,71 +28,122 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? 'save';
 
-    if ($action === 'delete_media') {
-        $mediaId = (int) ($_POST['media_id'] ?? 0);
-        $pdo->prepare('DELETE FROM project_media WHERE id = ? AND project_id = ?')->execute([$mediaId, $id]);
-        flash('success', 'Media removed.');
+    if ($action === 'delete_media' && $id > 0) {
+        try {
+            $mediaId = (int) ($_POST['media_id'] ?? 0);
+            $pdo->prepare('DELETE FROM project_media WHERE id = ? AND project_id = ?')->execute([$mediaId, $id]);
+            flash('success', 'Media removed.');
+        } catch (PDOException) {
+            flash('error', 'Could not remove media.');
+        }
         redirect('panel/project?id='.$id);
     }
 
     if ($action === 'add_media' && $id > 0) {
         $type = $_POST['type'] ?? 'image';
-        $url = trim($_POST['url'] ?? '');
-        if ($url === '') {
-            $errors[] = 'Media URL is required.';
-        } else {
-            $pdo->prepare('INSERT INTO project_media (project_id, type, url, thumbnail_url, caption, sort_order, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)')
-                ->execute([$id, $type, $url, trim($_POST['thumbnail_url'] ?? '') ?: null, trim($_POST['caption'] ?? '') ?: null, (int) ($_POST['sort_order'] ?? 0), now(), now()]);
-            flash('success', 'Media added.');
+        if (! in_array($type, ['image', 'video_cdn', 'video_youtube'], true)) {
+            $type = 'image';
+        }
+        $url = clip_text($_POST['url'] ?? '', 500);
+        if ($url === null || $url === '') {
+            flash('error', 'Media URL is required.');
             redirect('panel/project?id='.$id);
         }
+
+        try {
+            $pdo->prepare('
+                INSERT INTO project_media (project_id, type, url, thumbnail_url, caption, sort_order, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ')->execute([
+                $id,
+                $type,
+                $url,
+                clip_text($_POST['thumbnail_url'] ?? '', 500),
+                clip_text($_POST['caption'] ?? '', 255),
+                (int) ($_POST['sort_order'] ?? 0),
+                now(),
+                now(),
+            ]);
+            flash('success', 'Media added.');
+        } catch (PDOException $e) {
+            $message = 'Could not add media. Use a shorter CDN URL.';
+            if (! empty($config['debug'])) {
+                $message .= ' ('.$e->getMessage().')';
+            }
+            flash('error', $message);
+        }
+        redirect('panel/project?id='.$id);
     }
 
     if ($action === 'save') {
         $title = trim($_POST['title'] ?? '');
-        $slug = trim($_POST['slug'] ?? '');
-        if ($slug === '') {
-            $slug = slugify($title);
-        } else {
-            $slug = slugify($slug);
-        }
-        $status = $_POST['status'] ?? 'upcoming';
-        $cityId = $_POST['city_id'] ?? '';
-        $cityId = ($cityId !== '' && ctype_digit((string) $cityId)) ? (int) $cityId : null;
-
         if ($title === '') {
             $errors[] = 'Title is required.';
-        }
+        } else {
+            $slugInput = trim($_POST['slug'] ?? '');
+            $slug = slugify($slugInput !== '' ? $slugInput : $title);
+            $slug = unique_project_slug($pdo, $slug, $project ? $id : null);
 
-        if (! $errors) {
-            $data = [
-                $title, $slug, $status, $cityId,
-                trim($_POST['client_name'] ?? '') ?: null,
-                trim($_POST['project_type'] ?? '') ?: null,
-                trim($_POST['short_description'] ?? '') ?: null,
+            $status = $_POST['status'] ?? 'upcoming';
+            if (! in_array($status, ['upcoming', 'ongoing', 'completed'], true)) {
+                $status = 'upcoming';
+            }
+
+            $cityId = $_POST['city_id'] ?? '';
+            $cityId = ($cityId !== '' && ctype_digit((string) $cityId)) ? (int) $cityId : null;
+
+            $startDate = trim($_POST['start_date'] ?? '');
+            $endDate = trim($_POST['end_date'] ?? '');
+            $timestamp = now();
+
+            $fields = [
+                clip_text($title, 255),
+                clip_text($slug, 255),
+                $status,
+                $cityId,
+                clip_text($_POST['client_name'] ?? '', 255),
+                clip_text($_POST['project_type'] ?? '', 255),
+                clip_text($_POST['short_description'] ?? '', 500),
                 trim($_POST['description'] ?? '') ?: null,
-                trim($_POST['cover_image_url'] ?? '') ?: null,
-                $_POST['start_date'] ?: null,
-                $_POST['end_date'] ?: null,
+                clip_text($_POST['cover_image_url'] ?? '', 500),
+                $startDate !== '' ? $startDate : null,
+                $endDate !== '' ? $endDate : null,
                 isset($_POST['is_featured']) ? 1 : 0,
                 isset($_POST['is_published']) ? 1 : 0,
                 (int) ($_POST['sort_order'] ?? 0),
-                now(),
             ];
 
-            if ($project) {
-                $data[] = $id;
-                $pdo->prepare('UPDATE projects SET title=?, slug=?, status=?, city_id=?, client_name=?, project_type=?, short_description=?, description=?, cover_image_url=?, start_date=?, end_date=?, is_featured=?, is_published=?, sort_order=?, updated_at=? WHERE id=?')
-                    ->execute($data);
-                flash('success', 'Project updated.');
-                redirect('panel/project?id='.$id);
-            }
+            try {
+                if ($project) {
+                    $fields[] = $timestamp;
+                    $fields[] = $id;
+                    $pdo->prepare('
+                        UPDATE projects
+                        SET title = ?, slug = ?, status = ?, city_id = ?, client_name = ?, project_type = ?,
+                            short_description = ?, description = ?, cover_image_url = ?, start_date = ?, end_date = ?,
+                            is_featured = ?, is_published = ?, sort_order = ?, updated_at = ?
+                        WHERE id = ?
+                    ')->execute($fields);
+                    flash('success', 'Project updated.');
+                    redirect('panel/project?id='.$id);
+                }
 
-            $pdo->prepare('INSERT INTO projects (title, slug, status, city_id, client_name, project_type, short_description, description, cover_image_url, start_date, end_date, is_featured, is_published, sort_order, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)')
-                ->execute([...array_slice($data, 0, 14), now(), now()]);
-            $newId = (int) $pdo->lastInsertId();
-            flash('success', 'Project created. You can now add media.');
-            redirect('panel/project?id='.$newId);
+                $pdo->prepare('
+                    INSERT INTO projects (
+                        title, slug, status, city_id, client_name, project_type, short_description, description,
+                        cover_image_url, start_date, end_date, is_featured, is_published, sort_order, created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ')->execute([...$fields, $timestamp, $timestamp]);
+                $newId = (int) $pdo->lastInsertId();
+                flash('success', 'Project created. You can now add media.');
+                redirect('panel/project?id='.$newId);
+            } catch (PDOException $e) {
+                $message = 'Could not save project. Check title, slug, and image URL length.';
+                if (! empty($config['debug'])) {
+                    $message .= ' ('.$e->getMessage().')';
+                }
+                $errors[] = $message;
+            }
         }
     }
 }
